@@ -1,0 +1,11 @@
+# Render blueprint. Not deployed until Day 5.
+services:
+  - type: web
+    name: image-upload-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: render
