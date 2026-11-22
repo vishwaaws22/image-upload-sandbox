@@ -96,3 +96,5 @@ app/config.py       settings from environment variables
 tests/              pytest tests
 render.yaml         Render blueprint (used on Day 5)
 ```
+
+CI: lint and tests run on every pull request.
