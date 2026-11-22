@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install
+        run: pip install -r requirements-dev.txt
+      - name: Show configuration
+        env:
+          APP_ENV: ${{ vars.APP_ENV }}
+          DEMO_API_TOKEN: ${{ secrets.DEMO_API_TOKEN }}
+        run: |
+          echo "APP_ENV=$APP_ENV"
+          echo "DEMO_API_TOKEN=$DEMO_API_TOKEN"
+          if [ -n "$DEMO_API_TOKEN" ]; then echo "secret is set"; else echo "secret is NOT set"; fi
+      - name: Lint
+        run: ruff check .
+      - name: Format check
+        run: ruff format --check .
+      - name: Test
+        run: pytest -q
